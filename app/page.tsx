@@ -1,101 +1,299 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useEffect, useState } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import "@/styles/scrollEffect.css";
+
+import { motion } from "framer-motion";
+import { Pacifico } from "next/font/google";
+import { cn } from "@/lib/utils";
+
+import Test from "@/components/ui/PortalRing";
+
+import BackGround from "@/components/ui/bg";
+
+const pacifico = Pacifico({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-pacifico",
+});
+
+gsap.registerPlugin(ScrollTrigger);
+
+const colors = [
+  "text-red-500",
+  "text-orange-500",
+  "text-amber-500",
+  "text-yellow-500",
+  "text-lime-500",
+  "text-green-500",
+  "text-emerald-500",
+  "text-teal-500",
+  "text-cyan-500",
+  "text-sky-500",
+  "text-blue-500",
+  "text-indigo-500",
+  "text-violet-500",
+  "text-purple-500",
+  "text-fuchsia-500",
+  "text-pink-500",
+  "text-rose-500",
+];
+
+function CodingShape({
+  className,
+  delay = 0,
+  width = 400,
+  height = 100,
+  rotate = 0,
+  gradient = "from-white/[0.08]",
+  shape = "curly",
+}: {
+  className?: string;
+  delay?: number;
+  width?: number;
+  height?: number;
+  rotate?: number;
+  gradient?: string;
+  shape?: "curly" | "angle" | "slash";
+}) {
+  const getPath = () => {
+    switch (shape) {
+      case "curly":
+        return "M0,50 Q25,0 50,50 T100,50";
+      case "angle":
+        return "M0,100 L50,0 L100,100";
+      case "slash":
+        return "M0,100 L100,0";
+      default:
+        return "M0,50 Q25,0 50,50 T100,50";
+    }
+  };
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <motion.div
+      initial={{
+        opacity: 0,
+        y: -150,
+        rotate: rotate - 15,
+      }}
+      animate={{
+        opacity: 1,
+        y: 0,
+        rotate: rotate,
+      }}
+      transition={{
+        duration: 2.4,
+        delay,
+        ease: [0.23, 0.86, 0.39, 0.96],
+        opacity: { duration: 1.2 },
+      }}
+      className={cn("absolute", className)}
+    >
+      <motion.div
+        animate={{
+          y: [0, 15, 0],
+        }}
+        transition={{
+          duration: 12,
+          repeat: Number.POSITIVE_INFINITY,
+          ease: "easeInOut",
+        }}
+        style={{
+          width,
+          height,
+        }}
+        className="relative"
+      >
+        <svg
+          width={width}
+          height={height}
+          viewBox="0 0 100 100"
+          preserveAspectRatio="none"
+        >
+          <path
+            d={getPath()}
+            fill="none"
+            stroke="url(#gradient)"
+            strokeWidth="4"
+            vectorEffect="non-scaling-stroke"
+          />
+          <defs>
+            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" className={cn("stop-color-from", gradient)} />
+              <stop
+                offset="100%"
+                className="stop-color-to"
+                style={{ stopColor: "transparent" }}
+              />
+            </linearGradient>
+          </defs>
+        </svg>
+      </motion.div>
+    </motion.div>
+  );
+}
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+export default function ScrollEffect() {
+  const fadeUpVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: (i: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 1,
+        delay: 0.5 + i * 0.2,
+        ease: [0.25, 0.4, 0.25, 1],
+      },
+    }),
+  };
+
+  const [config, setConfig] = useState({
+    theme: "dark",
+    animate: true,
+    snap: true,
+    start: gsap.utils.random(0, 100, 1),
+    end: gsap.utils.random(900, 1000, 1),
+    scroll: true,
+    debug: false,
+  });
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = config.theme;
+    document.documentElement.dataset.syncScrollbar = config.scroll;
+    document.documentElement.dataset.animate = config.animate;
+    document.documentElement.dataset.snap = config.snap;
+    document.documentElement.dataset.debug = config.debug;
+    document.documentElement.style.setProperty("--start", config.start);
+    document.documentElement.style.setProperty("--hue", config.start);
+    document.documentElement.style.setProperty("--end", config.end);
+
+    let items = gsap.utils.toArray("ul li");
+    gsap.set(items, { opacity: (i) => (i !== 0 ? 0.2 : 1) });
+
+    const dimmer = gsap
+      .timeline()
+      .to(items.slice(1), {
+        opacity: 1,
+        stagger: 0.5,
+      })
+      .to(
+        items.slice(0, items.length - 1),
+        {
+          opacity: 0.2,
+          stagger: 0.5,
+        },
+        0
+      );
+
+    ScrollTrigger.create({
+      trigger: items[0],
+      endTrigger: items[items.length - 1],
+      start: "center center",
+      end: "center center",
+      animation: dimmer,
+      scrub: 0.2,
+    });
+
+    ScrollTrigger.create({
+      trigger: items[0],
+      endTrigger: items[items.length - 1],
+      start: "center center",
+      end: "center center",
+      animation: gsap.fromTo(
+        document.documentElement,
+        { "--hue": config.start },
+        { "--hue": config.end, ease: "none" }
+      ),
+      scrub: 0.2,
+    });
+  }, [config]);
+
+
+  return (
+    
+    <main>
+      {/* might delete this later on if i find better background effect. there is a one in scrollEffect.css commented out. update bg.tsx */}
+      <BackGround/> 
+      <header>
+      
+        <div className="flex flex-col items-center justify-center min-h-screen gap-6 text-center w-full">
+          <div className="relative z-10 container mx-auto px-4 md:px-6">
+            <div className="max-w-3xl mx-auto text-center">
+              <motion.div
+                custom={1}
+                variants={fadeUpVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                <h1 className="text-4xl sm:text-6xl md:text-8xl font-bold mb-6 md:mb-8 tracking-tight">
+                  <span className="bg-clip-text text-transparent bg-gradient-to-b from-white to-white/80">
+                    Elevate Your
+                  </span>
+                  <br />
+                  <span
+                    className={cn(
+                      "bg-clip-text text-transparent bg-gradient-to-r from-blue-300 via-white/90 to-purple-300 pr-11",
+                      pacifico.className
+                    )}
+                  >
+                    Coding Journey
+                  </span>
+                </h1>
+              </motion.div>
+              <br />
+              <motion.div
+                custom={2}
+                variants={fadeUpVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                <p className="text-base sm:text-lg md:text-xl text-white/40 mb-8 leading-relaxed font-light tracking-wide max-w-xl mx-auto px-4">
+                  Track, analyze, and improve your competitive programming
+                  skills.
+                </p>
+              </motion.div>
+            </div>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      </header>
+      <section className="content fluid">
+        <h2>you can&nbsp;</h2>
+        <ul>
+          {[
+            "design",
+            " prototype",
+            "solve",
+            "build",
+            "develop",
+            "debug",
+            "learn",
+            "cook",
+            "ship",
+            "prompt",
+            "collaborate",
+            "create",
+            "inspire",
+            "follow",
+            "innovate",
+            "test",
+            "optimize",
+            "teach",
+            "visualize",
+            "transform",
+            "scale",
+            "do it",
+          ].map((text, i) => (
+            <li key={i} className={colors[i % colors.length]}>
+              {text}.
+            </li>
+          ))}
+        </ul>
+      </section>
+      <section>
+        <Test />
+      </section>
+    </main>
   );
 }

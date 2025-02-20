@@ -1,0 +1,36 @@
+.cursor {
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  mix-blend-mode: difference;
+}
+
+.circle {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  transition: background-color 0.4s ease, box-shadow 0.4s ease, transform 1s ease-out;
+  cursor: none;
+  z-index: 9999;
+}
+
+[data-cursor-theme="default"] .circle {
+  background-color: white;
+  box-shadow:
+    0 0 1.5px 0.75px #fff,
+    0 0 2.5px 1.5px #f0f,
+    0 0 2.7px 2px #0ff;
+}
+
+[data-cursor-theme="noColor"] .circle {
+  background-color: white;
+  box-shadow: none;
+  transform: scale(0.8);
+}
+
+.noColor *{
+  pointer-events: auto;
+}
