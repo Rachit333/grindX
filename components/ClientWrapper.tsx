@@ -1,13 +1,15 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, ReactNode } from "react";
 import LoadingScreen from "./Loading";
 import Cursor from "@/components/ui/Cursor";
 import Navbar from "@/components/ui/navbar";
 import ProfileView from "@/components/ProfileView";
 
+interface ClientWrapperProps {
+  children: ReactNode;
+}
 
-
-export default function ClientWrapper({ children }) {
+export default function ClientWrapper({ children }: ClientWrapperProps) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -21,19 +23,16 @@ export default function ClientWrapper({ children }) {
     }
   }, []);
 
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
+
   return (
     <>
-      {isLoading ? (
-        <LoadingScreen />
-      ) : (
-        <>
-        
-          <Cursor />
-          <Navbar />
-          <ProfileView />
-        </>
-      )}
-      {!isLoading && children}
+      <Cursor />
+      <Navbar />
+      <ProfileView />
+      {children}
     </>
   );
 }
