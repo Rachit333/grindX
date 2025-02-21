@@ -1,4 +1,4 @@
-import mongoose, { Connection } from "mongoose";
+import mongoose from "mongoose";
 
 const MONGODB_URI = process.env.MONGODB_URI as string;
 
@@ -7,30 +7,31 @@ if (!MONGODB_URI) {
 }
 
 interface MongooseCache {
-  conn: Connection | null;
+  conn: typeof mongoose | null;
   promise: Promise<typeof mongoose> | null;
 }
 
-// ✅ Correct global declaration using `var`
+// ✅ Properly extend `globalThis`
 declare global {
-  let mongoose: MongooseCache | undefined;
+  // eslint-disable-next-line no-var
+  var mongoose: MongooseCache | undefined;
 }
 
-// ✅ Use nullish coalescing to initialize `global.mongoose`
-global.mongoose = global.mongoose ?? { conn: null, promise: null };
+// ✅ Use `globalThis` instead of `global`
+globalThis.mongoose = globalThis.mongoose ?? { conn: null, promise: null };
 
-async function connectDB(): Promise<Connection> {
-  if (global.mongoose.conn) return global.mongoose.conn;
+async function connectDB(): Promise<typeof mongoose> {
+  if (globalThis.mongoose!.conn) return globalThis.mongoose!.conn;
 
-  if (!global.mongoose.promise) {
-    global.mongoose.promise = mongoose.connect(MONGODB_URI, {
-      dbName: "test", // ✅ Change this to your actual database name
+  if (!globalThis.mongoose!.promise) {
+    globalThis.mongoose!.promise = mongoose.connect(MONGODB_URI, {
+      dbName: "test",
       bufferCommands: false,
-    }).then((mongooseInstance) => mongooseInstance.connection);
+    });
   }
 
-  global.mongoose.conn = await global.mongoose.promise;
-  return global.mongoose.conn;
+  globalThis.mongoose!.conn = await globalThis.mongoose!.promise;
+  return globalThis.mongoose!.conn;
 }
 
 export default connectDB;
