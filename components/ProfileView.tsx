@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { User, LogOut, Settings } from "lucide-react";
+import { Users } from "firebase/auth"; 
 
 const getRandomAvatarUrl = () => {
   const getRandom = (max = 10) => Math.floor(Math.random() * max) + 1;
@@ -41,7 +42,7 @@ const getRandomAvatarUrl = () => {
 
 
 export default function AuthComponent() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<Users | null>(null);
   const router = useRouter();
   const [avatarUrl, setAvatarUrl] = useState("");
 
