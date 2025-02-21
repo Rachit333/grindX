@@ -1,30 +1,32 @@
-import mongoose from "mongoose";
+import mongoose, { Connection } from "mongoose";
 
-const MONGODB_URI = process.env.MONGODB_URI;
+const MONGODB_URI = process.env.MONGODB_URI as string;
 
-if (!MONGODB_URI) throw new Error("Missing MongoDB URI");
-
-// Explicitly define global type for mongoose
-declare global {
-  var mongoose: {
-    conn: mongoose.Connection | null;
-    promise: Promise<typeof mongoose> | null;
-  };
+if (!MONGODB_URI) {
+  throw new Error("Missing MongoDB URI");
 }
 
-// Ensure global.mongoose is initialized
-global.mongoose = global.mongoose || { conn: null, promise: null };
+interface MongooseCache {
+  conn: Connection | null;
+  promise: Promise<typeof mongoose> | null;
+}
 
-async function connectDB() {
+// ✅ Correct global declaration using `var`
+declare global {
+  let mongoose: MongooseCache | undefined;
+}
+
+// ✅ Use nullish coalescing to initialize `global.mongoose`
+global.mongoose = global.mongoose ?? { conn: null, promise: null };
+
+async function connectDB(): Promise<Connection> {
   if (global.mongoose.conn) return global.mongoose.conn;
 
   if (!global.mongoose.promise) {
-    global.mongoose.promise = mongoose
-      .connect(MONGODB_URI, {
-        dbName: "test", // Change this to your actual database name
-        bufferCommands: false,
-      })
-      .then((mongooseInstance) => mongooseInstance);
+    global.mongoose.promise = mongoose.connect(MONGODB_URI, {
+      dbName: "test", // ✅ Change this to your actual database name
+      bufferCommands: false,
+    }).then((mongooseInstance) => mongooseInstance.connection);
   }
 
   global.mongoose.conn = await global.mongoose.promise;
