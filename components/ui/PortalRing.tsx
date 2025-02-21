@@ -8,6 +8,7 @@ export default function Header() {
       <div className="sticker">
         <div className="content1">
           <div className="panel">
+            
             {/* Panel Row 1 */}
             <div className="panel__row sensitive-cursor">
               <div className="card card--one">
