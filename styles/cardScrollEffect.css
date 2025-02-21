@@ -1,9 +1,8 @@
 
 .my-theme {
   --border: hsl(0 0% 80%);
-  --card: hsl(0 0% 98%);
+  --card: hsl(0, 0%, 100%);
   --element: hsl(0 0% 90%);
-  --accent: hsl(240 38% 60%);
   --panel: hsl(240 38% 98%);
   --entity-size: 30px;
 }
@@ -54,7 +53,6 @@ main {
 /*  width: 680px;*/
   max-width: calc(100vw - 2rem);
   border-radius: 18px;
-  border: 2px solid var(--accent);
   display: grid;
   grid-template-rows: repeat(6, 60px);
   gap: 1rem;
