@@ -161,13 +161,24 @@ export default function ScrollEffect() {
 
   useEffect(() => {
     document.documentElement.dataset.theme = config.theme;
-    document.documentElement.dataset.syncScrollbar = config.scroll;
-    document.documentElement.dataset.animate = config.animate;
-    document.documentElement.dataset.snap = config.snap;
-    document.documentElement.dataset.debug = config.debug;
-    document.documentElement.style.setProperty("--start", config.start);
-    document.documentElement.style.setProperty("--hue", config.start);
-    document.documentElement.style.setProperty("--end", config.end);
+    document.documentElement.dataset.syncScrollbar = config.scroll
+      ? "true"
+      : "false";
+    document.documentElement.dataset.animate = config.animate
+      ? "true"
+      : "false";
+    document.documentElement.dataset.snap = config.snap ? "true" : "false";
+    document.documentElement.dataset.debug = config.debug ? "true" : "false";
+
+    document.documentElement.style.setProperty(
+      "--start",
+      config.start.toString()
+    );
+    document.documentElement.style.setProperty(
+      "--hue",
+      config.start.toString()
+    );
+    document.documentElement.style.setProperty("--end", config.end.toString());
 
     let items = gsap.utils.toArray("ul li");
     gsap.set(items, { opacity: (i) => (i !== 0 ? 0.2 : 1) });
@@ -210,14 +221,11 @@ export default function ScrollEffect() {
     });
   }, [config]);
 
-
   return (
-    
     <main>
       {/* might delete this later on if i find better background effect. there is a one in scrollEffect.css commented out. update bg.tsx */}
-      <BackGround/> 
+      <BackGround />
       <header>
-      
         <div className="flex flex-col items-center justify-center min-h-screen gap-6 text-center w-full">
           <div className="relative z-10 container mx-auto px-4 md:px-6">
             <div className="max-w-3xl mx-auto text-center">
