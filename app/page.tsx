@@ -236,27 +236,16 @@ export default function ScrollEffect() {
         <h2>you can&nbsp;</h2>
         <ul ref={listRef}>
           {[
-            "design",
-            " prototype",
             "solve",
             "build",
             "develop",
             "debug",
             "learn",
-            "cook",
-            "ship",
-            "prompt",
             "collaborate",
-            "create",
-            "inspire",
             "follow",
-            "innovate",
             "test",
             "optimize",
-            "teach",
             "visualize",
-            "transform",
-            "scale",
             "do it",
           ].map((text, i) => (
             <li key={i} className={colors[i % colors.length]}>
