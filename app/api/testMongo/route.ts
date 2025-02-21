@@ -4,10 +4,14 @@ import { User } from "@/models/userModel";
 
 export async function GET() {
   try {
-    await connectDB(); 
-    const users = await User.find(); 
+    await connectDB();
+    const users = await User.find();
     return NextResponse.json({ success: true, users });
   } catch (error) {
-    return NextResponse.json({ success: false, error: error.message });
+    if (error instanceof Error) {
+      return NextResponse.json({ success: false, error: error.message });
+    } else {
+      return NextResponse.json({ success: false, error: "An unknown error occurred" });
+    }
   }
 }
