@@ -38,17 +38,24 @@ const requestRef = useRef<number | null>(null);
 
       if (cursorRef.current) {
         cursorRef.current.childNodes.forEach((circle, index) => {
-          circle.style.left = `${circlesRef.current[index].x - 12}px`;
-          circle.style.top = `${circlesRef.current[index].y - 12}px`;
-          circle.style.transform = `scale(${(numCircles - index) / numCircles})`;
+          const div = circle as HTMLElement; // Casting to HTMLElement
+          div.style.left = `${circlesRef.current[index].x - 12}px`;
+          div.style.top = `${circlesRef.current[index].y - 12}px`;
+          div.style.transform = `scale(${(numCircles - index) / numCircles})`;
         });
       }
+      
 
       requestRef.current = requestAnimationFrame(animateCircles);
     };
 
     requestRef.current = requestAnimationFrame(animateCircles);
-    return () => cancelAnimationFrame(requestRef.current);
+    return () => {
+      if (requestRef.current) {
+        cancelAnimationFrame(requestRef.current);
+      }
+    };
+    
   }, [coords]);
 
   useEffect(() => {
