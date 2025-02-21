@@ -1,25 +1,24 @@
-"use client";
+"use client"
 
-import { useEffect, useState } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import "@/styles/scrollEffect.css";
+import { useEffect, useState, useRef } from "react"
+import gsap from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
+import "@/styles/scrollEffect.css"
 
-import { motion } from "framer-motion";
-import { Pacifico } from "next/font/google";
-import { cn } from "@/lib/utils";
+import { motion } from "framer-motion"
+import { Pacifico } from "next/font/google"
+import { cn } from "@/lib/utils"
 
-import Test from "@/components/ui/PortalRing";
-
-import BackGround from "@/components/ui/bg";
+import Test from "@/components/ui/PortalRing"
+import BackGround from "@/components/ui/bg"
 
 const pacifico = Pacifico({
   subsets: ["latin"],
   weight: ["400"],
   variable: "--font-pacifico",
-});
+})
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger)
 
 const colors = [
   "text-red-500",
@@ -39,7 +38,7 @@ const colors = [
   "text-fuchsia-500",
   "text-pink-500",
   "text-rose-500",
-];
+]
 
 function CodingShape({
   className,
@@ -50,26 +49,26 @@ function CodingShape({
   gradient = "from-white/[0.08]",
   shape = "curly",
 }: {
-  className?: string;
-  delay?: number;
-  width?: number;
-  height?: number;
-  rotate?: number;
-  gradient?: string;
-  shape?: "curly" | "angle" | "slash";
+  className?: string
+  delay?: number
+  width?: number
+  height?: number
+  rotate?: number
+  gradient?: string
+  shape?: "curly" | "angle" | "slash"
 }) {
   const getPath = () => {
     switch (shape) {
       case "curly":
-        return "M0,50 Q25,0 50,50 T100,50";
+        return "M0,50 Q25,0 50,50 T100,50"
       case "angle":
-        return "M0,100 L50,0 L100,100";
+        return "M0,100 L50,0 L100,100"
       case "slash":
-        return "M0,100 L100,0";
+        return "M0,100 L100,0"
       default:
-        return "M0,50 Q25,0 50,50 T100,50";
+        return "M0,50 Q25,0 50,50 T100,50"
     }
-  };
+  }
 
   return (
     <motion.div
@@ -106,33 +105,18 @@ function CodingShape({
         }}
         className="relative"
       >
-        <svg
-          width={width}
-          height={height}
-          viewBox="0 0 100 100"
-          preserveAspectRatio="none"
-        >
-          <path
-            d={getPath()}
-            fill="none"
-            stroke="url(#gradient)"
-            strokeWidth="4"
-            vectorEffect="non-scaling-stroke"
-          />
+        <svg width={width} height={height} viewBox="0 0 100 100" preserveAspectRatio="none">
+          <path d={getPath()} fill="none" stroke="url(#gradient)" strokeWidth="4" vectorEffect="non-scaling-stroke" />
           <defs>
             <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" className={cn("stop-color-from", gradient)} />
-              <stop
-                offset="100%"
-                className="stop-color-to"
-                style={{ stopColor: "transparent" }}
-              />
+              <stop offset="100%" className="stop-color-to" style={{ stopColor: "transparent" }} />
             </linearGradient>
           </defs>
         </svg>
       </motion.div>
     </motion.div>
-  );
+  )
 }
 
 export default function ScrollEffect() {
@@ -147,7 +131,7 @@ export default function ScrollEffect() {
         ease: [0.25, 0.4, 0.25, 1],
       },
     }),
-  };
+  }
 
   const [config, setConfig] = useState({
     theme: "dark",
@@ -157,84 +141,72 @@ export default function ScrollEffect() {
     end: gsap.utils.random(900, 1000, 1),
     scroll: true,
     debug: false,
-  });
+  })
+
+  const listRef = useRef<HTMLUListElement>(null)
 
   useEffect(() => {
-    document.documentElement.dataset.theme = config.theme;
-    document.documentElement.dataset.syncScrollbar = config.scroll
-      ? "true"
-      : "false";
-    document.documentElement.dataset.animate = config.animate
-      ? "true"
-      : "false";
-    document.documentElement.dataset.snap = config.snap ? "true" : "false";
-    document.documentElement.dataset.debug = config.debug ? "true" : "false";
+    document.documentElement.dataset.theme = config.theme
+    document.documentElement.dataset.syncScrollbar = config.scroll ? "true" : "false"
+    document.documentElement.dataset.animate = config.animate ? "true" : "false"
+    document.documentElement.dataset.snap = config.snap ? "true" : "false"
+    document.documentElement.dataset.debug = config.debug ? "true" : "false"
 
-    document.documentElement.style.setProperty(
-      "--start",
-      config.start.toString()
-    );
-    document.documentElement.style.setProperty(
-      "--hue",
-      config.start.toString()
-    );
-    document.documentElement.style.setProperty("--end", config.end.toString());
+    document.documentElement.style.setProperty("--start", config.start.toString())
+    document.documentElement.style.setProperty("--hue", config.start.toString())
+    document.documentElement.style.setProperty("--end", config.end.toString())
 
-    let items = gsap.utils.toArray("ul li");
-    gsap.set(items, { opacity: (i) => (i !== 0 ? 0.2 : 1) });
+    if (listRef.current) {
+      const items = gsap.utils.toArray<HTMLLIElement>(listRef.current.querySelectorAll("li"))
+      gsap.set(items, { opacity: (i) => (i !== 0 ? 0.2 : 1) })
 
-    const dimmer = gsap
-      .timeline()
-      .to(items.slice(1), {
-        opacity: 1,
-        stagger: 0.5,
-      })
-      .to(
-        items.slice(0, items.length - 1),
-        {
-          opacity: 0.2,
+      const dimmer = gsap
+        .timeline()
+        .to(items.slice(1), {
+          opacity: 1,
           stagger: 0.5,
-        },
-        0
-      );
+        })
+        .to(
+          items.slice(0, items.length - 1),
+          {
+            opacity: 0.2,
+            stagger: 0.5,
+          },
+          0,
+        )
 
-    ScrollTrigger.create({
-      trigger: items[0],
-      endTrigger: items[items.length - 1],
-      start: "center center",
-      end: "center center",
-      animation: dimmer,
-      scrub: 0.2,
-    });
+      ScrollTrigger.create({
+        trigger: items[0],
+        endTrigger: items[items.length - 1],
+        start: "center center",
+        end: "center center",
+        animation: dimmer,
+        scrub: 0.2,
+      })
 
-    ScrollTrigger.create({
-      trigger: items[0],
-      endTrigger: items[items.length - 1],
-      start: "center center",
-      end: "center center",
-      animation: gsap.fromTo(
-        document.documentElement,
-        { "--hue": config.start },
-        { "--hue": config.end, ease: "none" }
-      ),
-      scrub: 0.2,
-    });
-  }, [config]);
+      ScrollTrigger.create({
+        trigger: items[0],
+        endTrigger: items[items.length - 1],
+        start: "center center",
+        end: "center center",
+        animation: gsap.fromTo(
+          document.documentElement,
+          { "--hue": config.start },
+          { "--hue": config.end, ease: "none" },
+        ),
+        scrub: 0.2,
+      })
+    }
+  }, [config])
 
   return (
     <main>
-      {/* might delete this later on if i find better background effect. there is a one in scrollEffect.css commented out. update bg.tsx */}
       <BackGround />
       <header>
         <div className="flex flex-col items-center justify-center min-h-screen gap-6 text-center w-full">
           <div className="relative z-10 container mx-auto px-4 md:px-6">
             <div className="max-w-3xl mx-auto text-center">
-              <motion.div
-                custom={1}
-                variants={fadeUpVariants}
-                initial="hidden"
-                animate="visible"
-              >
+              <motion.div custom={1} variants={fadeUpVariants} initial="hidden" animate="visible">
                 <h1 className="text-4xl sm:text-6xl md:text-8xl font-bold mb-6 md:mb-8 tracking-tight">
                   <span className="bg-clip-text text-transparent bg-gradient-to-b from-white to-white/80">
                     Elevate Your
@@ -243,7 +215,7 @@ export default function ScrollEffect() {
                   <span
                     className={cn(
                       "bg-clip-text text-transparent bg-gradient-to-r from-blue-300 via-white/90 to-purple-300 pr-11",
-                      pacifico.className
+                      pacifico.className,
                     )}
                   >
                     Coding Journey
@@ -251,15 +223,9 @@ export default function ScrollEffect() {
                 </h1>
               </motion.div>
               <br />
-              <motion.div
-                custom={2}
-                variants={fadeUpVariants}
-                initial="hidden"
-                animate="visible"
-              >
+              <motion.div custom={2} variants={fadeUpVariants} initial="hidden" animate="visible">
                 <p className="text-base sm:text-lg md:text-xl text-white/40 mb-8 leading-relaxed font-light tracking-wide max-w-xl mx-auto px-4">
-                  Track, analyze, and improve your competitive programming
-                  skills.
+                  Track, analyze, and improve your competitive programming skills.
                 </p>
               </motion.div>
             </div>
@@ -268,7 +234,7 @@ export default function ScrollEffect() {
       </header>
       <section className="content fluid">
         <h2>you can&nbsp;</h2>
-        <ul>
+        <ul ref={listRef}>
           {[
             "design",
             " prototype",
@@ -303,5 +269,6 @@ export default function ScrollEffect() {
         <Test />
       </section>
     </main>
-  );
+  )
 }
+
