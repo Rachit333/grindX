@@ -4,20 +4,22 @@ import { useEffect, useState, useRef } from "react";
 import styles from "./Cursor.module.css";
 
 export default function Cursor() {
-  const [coords, setCoords] = useState({ x: 0, y: 0 });
+  const [coords, setCoords] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const numCircles = 30;
 const circlesRef = useRef(
   new Array(numCircles).fill(null).map(() => ({ x: 0, y: 0 }))
 );
-  const cursorRef = useRef(null);
-  const requestRef = useRef(null);
+const cursorRef = useRef<HTMLDivElement | null>(null);
+const requestRef = useRef<number | null>(null);
+
 
   useEffect(() => {
     document.documentElement.dataset.cursorTheme = "default";
 
-    const handleMouseMove = (e) => {
+    const handleMouseMove = (e: MouseEvent) => {
       setCoords({ x: e.clientX, y: e.clientY });
     };
+    
 
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
