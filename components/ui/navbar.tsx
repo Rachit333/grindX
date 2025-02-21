@@ -4,10 +4,19 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Code } from "lucide-react"
 
+import { ReactNode } from "react";
+
+interface FlipLinkProps {
+  children: ReactNode;
+  href: string;
+}
+
 const DURATION = 0.25;
 const STAGGER = 0.025;
 
-const FlipLink = ({ children, href }) => {
+const FlipLink: React.FC<FlipLinkProps> = ({ children, href }) => {
+  const text = typeof children === "string" ? children : String(children); // Ensure it's a string
+
   return (
     <motion.a
       initial="initial"
@@ -16,8 +25,9 @@ const FlipLink = ({ children, href }) => {
       className="relative block overflow-hidden whitespace-nowrap text-sm text-[#888] hover:text-white/90 transition-colors cursor-none"
     >
       <div>
-        {children.split("").map((l, i) => (
+        {text.split("").map((l, i) => (
           <motion.span
+            key={i}
             variants={{
               initial: { y: 0 },
               hovered: { y: "-100%" },
@@ -28,15 +38,15 @@ const FlipLink = ({ children, href }) => {
               delay: STAGGER * i,
             }}
             className="inline-block"
-            key={i}
           >
             {l}
           </motion.span>
         ))}
       </div>
       <div className="absolute inset-0">
-        {children.split("").map((l, i) => (
+        {text.split("").map((l, i) => (
           <motion.span
+            key={i}
             variants={{
               initial: { y: "100%" },
               hovered: { y: 0 },
@@ -47,7 +57,6 @@ const FlipLink = ({ children, href }) => {
               delay: STAGGER * i,
             }}
             className="inline-block"
-            key={i}
           >
             {l}
           </motion.span>
@@ -56,6 +65,7 @@ const FlipLink = ({ children, href }) => {
     </motion.a>
   );
 };
+
 
 export default function Navbar() {
   return (
