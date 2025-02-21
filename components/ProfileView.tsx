@@ -19,23 +19,26 @@ import { User, LogOut, Settings } from "lucide-react";
 const getRandomAvatarUrl = () => {
   const getRandom = (max = 10) => Math.floor(Math.random() * max) + 1;
 
-  const params = new URLSearchParams({
-    face: getRandom(),
-    nose: getRandom(),
-    mouth: getRandom(),
-    eyes: getRandom(),
-    eyebrows: getRandom(),
-    glasses: getRandom(),
-    hair: getRandom(),
-    accessories: getRandom(),
-    details: getRandom(),
-    beard: getRandom(),
-    halloween: "0",
-    christmas: "0",
-  });
+  const params = new URLSearchParams(
+    Object.entries({
+      face: getRandom(),
+      nose: getRandom(),
+      mouth: getRandom(),
+      eyes: getRandom(),
+      eyebrows: getRandom(),
+      glasses: getRandom(),
+      hair: getRandom(),
+      accessories: getRandom(),
+      details: getRandom(),
+      beard: getRandom(),
+      halloween: "0",
+      christmas: "0",
+    }).map(([key, value]) => [key, value.toString()]) // Convert numbers to strings
+  );
 
   return `https://notion-avatars.netlify.app/api/avatar/?${params.toString()}`;
 };
+
 
 export default function AuthComponent() {
   const [user, setUser] = useState(null);
