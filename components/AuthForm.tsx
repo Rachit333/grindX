@@ -81,7 +81,7 @@ export default function AuthForm() {
   };
 
   return (
-    <Card className="w-[350px]">
+    <Card className="w-[350px] sensitive-cursor">
       <CardHeader>
         <CardTitle>{isSignUp ? "Create an account" : "Welcome back"}</CardTitle>
         <CardDescription>
