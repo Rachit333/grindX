@@ -6,6 +6,7 @@
   --accent: hsl(240 38% 60%);
   --panel: hsl(240 38% 98%);
   --entity-size: 30px;
+  --panel-height: calc(6 * 60px + 4rem + 6 * 1rem); 
 }
 
 
@@ -92,8 +93,6 @@ main {
   background: transparent;
   box-shadow: none;
 }
-
-/* Card wizardry */
 
 
 .card {
@@ -564,3 +563,5 @@ main {
   object-fit: cover;
   
 }
+
+
