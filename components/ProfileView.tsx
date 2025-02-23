@@ -198,13 +198,13 @@ export default function AuthComponent() {
     });
   }
 
-  // Fetch user data from the database
+  // fetch user data from the database
   async function fetchUser() {
     try {
       setLoading(true);
       const token = await getAuthToken();
 
-      const { data } = await axios.get("/api/protectedRoute", {
+      const { data } = await axios.get("/api/saveUserData", {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -236,12 +236,7 @@ export default function AuthComponent() {
 
   if (!user) {
     return (
-      <Button
-        onClick={() => router.push("/login")}
-        className="bg-white text-black hover:bg-gray-100 transition fixed top-4 right-4"
-      >
-        Log in
-      </Button>
+      <></>
     );
   }
 

@@ -1,5 +1,7 @@
 // "use client";
 
+// import type React from "react";
+
 // import { useState, useEffect } from "react";
 // import { useRouter } from "next/navigation";
 // import { auth, googleProvider, githubProvider } from "@/lib/firebase";
@@ -7,16 +9,24 @@
 //   signInWithPopup,
 //   createUserWithEmailAndPassword,
 //   signInWithEmailAndPassword,
-//   onAuthStateChanged
+//   onAuthStateChanged,
 // } from "firebase/auth";
 // import { Button } from "@/components/ui/button";
 // import { Input } from "@/components/ui/input";
 // import { Label } from "@/components/ui/label";
-// import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+// import {
+//   Card,
+//   CardContent,
+//   CardDescription,
+//   CardHeader,
+//   CardTitle,
+// } from "@/components/ui/card";
 // import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 // import { Separator } from "@/components/ui/separator";
+// import { Github, Eye, EyeOff } from "lucide-react"
 
-// import { User } from "firebase/auth";
+
+// import type { User } from "firebase/auth";
 
 // export default function AuthForm() {
 //   const [isSignUp, setIsSignUp] = useState(true);
@@ -25,11 +35,12 @@
 //   const [name, setName] = useState("");
 //   const [error, setError] = useState("");
 //   const [user, setUser] = useState<User | null>(null);
+//   const [showPassword, setShowPassword] = useState(false)
 //   const router = useRouter();
 
 //   useEffect(() => {
 //     setError("");
-//   }, [isSignUp]);
+//   }, []);
 
 //   useEffect(() => {
 //     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -47,11 +58,19 @@
 
 //     try {
 //       if (isSignUp) {
-//         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+//         const userCredential = await createUserWithEmailAndPassword(
+//           auth,
+//           email,
+//           password
+//         );
 //         console.log("User signed up:", userCredential.user);
 //         router.push("/");
 //       } else {
-//         const userCredential = await signInWithEmailAndPassword(auth, email, password);
+//         const userCredential = await signInWithEmailAndPassword(
+//           auth,
+//           email,
+//           password
+//         );
 //         console.log("User signed in:", userCredential.user);
 //         router.push("/");
 //       }
@@ -81,225 +100,377 @@
 //   };
 
 //   return (
-//     <Card className="w-[350px] sensitive-cursor">
-//       <CardHeader>
-//         <CardTitle>{isSignUp ? "Create an account" : "Welcome back"}</CardTitle>
-//         <CardDescription>
-//           {isSignUp ? "Enter your details below to create your account" : "Enter your credentials to access your account"}
+//     <Card className="w-[350px] shadow-lg sensitive-cursor">
+//       <CardHeader className="space-y-1">
+//         <CardTitle className="text-2xl font-bold">
+//           {isSignUp ? "Create an account" : "Welcome back"}
+//         </CardTitle>
+//         <CardDescription className="text-sm text-muted-foreground">
+//           {isSignUp
+//             ? "Enter your details to create your account"
+//             : "Enter your credentials to access your account"}
 //         </CardDescription>
 //       </CardHeader>
 //       <CardContent>
 //         <Tabs value={isSignUp ? "signup" : "signin"} className="w-full">
-//           <TabsList className="grid w-full grid-cols-2">
-//             <TabsTrigger value="signup" onClick={() => setIsSignUp(true)}>Sign Up</TabsTrigger>
-//             <TabsTrigger value="signin" onClick={() => setIsSignUp(false)}>Sign In</TabsTrigger>
+//           <TabsList className="grid w-full grid-cols-2 mb-4">
+//             <TabsTrigger value="signup" onClick={() => setIsSignUp(true)}>
+//               Sign Up
+//             </TabsTrigger>
+//             <TabsTrigger value="signin" onClick={() => setIsSignUp(false)}>
+//               Sign In
+//             </TabsTrigger>
 //           </TabsList>
 //           <TabsContent value="signup">
 //             <form onSubmit={handleSubmit} className="space-y-4">
 //               {error && <p className="text-red-500 text-sm">{error}</p>}
 //               <div className="space-y-2">
-//                 <Label htmlFor="name">Name</Label>
-//                 <Input id="name" type="text" placeholder="John Doe" value={name} onChange={(e) => setName(e.target.value)} required />
+//                 <Label htmlFor="name" className="text-sm font-medium">
+//                   Name
+//                 </Label>
+//                 <Input
+//                   id="name"
+//                   type="text"
+//                   placeholder="Ligma Bawls"
+//                   value={name}
+//                   onChange={(e) => setName(e.target.value)}
+//                   required
+//                   className="w-full"
+//                 />
 //               </div>
 //               <div className="space-y-2">
-//                 <Label htmlFor="email">Email</Label>
-//                 <Input id="email" type="email" placeholder="john@example.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
+//                 <Label htmlFor="email" className="text-sm font-medium">
+//                   Email
+//                 </Label>
+//                 <Input
+//                   id="email"
+//                   type="email"
+//                   placeholder="sigmaboi@example.com"
+//                   value={email}
+//                   onChange={(e) => setEmail(e.target.value)}
+//                   required
+//                   autoComplete="off"
+//                   className="w-full"
+//                 />
 //               </div>
 //               <div className="space-y-2">
-//                 <Label htmlFor="password">Password</Label>
-//                 <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+//                 <Label htmlFor="password" className="text-sm font-medium">
+//                   Password
+//                 </Label>
+//                 <div className="relative">
+//                   <Input
+//                     id="password"
+//                     type={showPassword ? "text" : "password"}
+//                     value={password}
+//                     onChange={(e) => setPassword(e.target.value)}
+//                     required
+//                     className="w-full pr-10"
+//                     autoComplete="new-password"
+//                   />
+//                   <button
+//                     type="button"
+//                     onClick={() => setShowPassword(!showPassword)}
+//                     className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700"
+//                   >
+//                     {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+//                   </button>
+//                 </div>
 //               </div>
-//               <Button type="submit" className="w-full">Create Account</Button>
+
+//               <Button type="submit" className="w-full">
+//                 Create Account
+//               </Button>
 //             </form>
 //           </TabsContent>
 //           <TabsContent value="signin">
 //             <form onSubmit={handleSubmit} className="space-y-4">
 //               {error && <p className="text-red-500 text-sm">{error}</p>}
 //               <div className="space-y-2">
-//                 <Label htmlFor="signin-email">Email</Label>
-//                 <Input id="signin-email" type="email" placeholder="john@example.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
+//                 <Label htmlFor="signin-email" className="text-sm font-medium">
+//                   Email
+//                 </Label>
+//                 <Input
+//                   id="signin-email"
+//                   type="email"
+//                   placeholder="sigmaboi@example.com"
+//                   value={email}
+//                   onChange={(e) => setEmail(e.target.value)}
+//                   required
+//                   autoComplete="off"
+//                   className="w-full"
+//                 />
 //               </div>
 //               <div className="space-y-2">
-//                 <Label htmlFor="signin-password">Password</Label>
-//                 <Input id="signin-password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+//                 <Label
+//                   htmlFor="signin-password"
+//                   className="text-sm font-medium"
+//                 >
+//                   Password
+//                 </Label>
+//                 <div className="relative">
+//                   <Input
+//                     id="signin-password"
+//                     type={showPassword ? "text" : "password"}
+//                     value={password}
+//                     onChange={(e) => setPassword(e.target.value)}
+//                     required
+//                     autoComplete="new-password"
+//                     className="w-full pr-10"
+//                   />
+//                   <button
+//                     type="button"
+//                     onClick={() => setShowPassword(!showPassword)}
+//                     className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700"
+//                   >
+//                     {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+//                   </button>
+//                 </div>
 //               </div>
-//               <Button type="submit" className="w-full">Sign In</Button>
+//               <Button type="submit" className="w-full">
+//                 Sign In
+//               </Button>
 //             </form>
 //           </TabsContent>
 //         </Tabs>
-//         <Separator className="my-4" />
-//         <div className="space-y-4">
-//           <Button variant="outline" className="w-full" onClick={handleGoogleAuth}>
-//             Sign {isSignUp ? "up" : "in"} with Google
+//         <div className="relative my-4">
+//           <Separator />
+//           <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-background px-2 text-xs text-muted-foreground">
+//             Or continue with
+//           </span>
+//         </div>
+//         <div className="grid grid-cols-2 gap-4 items-center">
+//           <Button
+//             variant="outline"
+//             className="w-full"
+//             onClick={handleGoogleAuth}
+//           >
+//             <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
+//               <path
+//                 d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+//                 fill="#4285F4"
+//               />
+//               <path
+//                 d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+//                 fill="#34A853"
+//               />
+//               <path
+//                 d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+//                 fill="#FBBC05"
+//               />
+//               <path
+//                 d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+//                 fill="#EA4335"
+//               />
+//               <path d="M1 1h22v22H1z" fill="none" />
+//             </svg>
+//             Google
 //           </Button>
-//           <Button variant="outline" className="w-full" onClick={handleGitHubAuth}>
-//             Sign {isSignUp ? "up" : "in"} with GitHub
+//           <Button
+//             variant="outline"
+//             className="w-full"
+//             onClick={handleGitHubAuth}
+//           >
+//             <Github className="mr-2 h-4 w-4" />
+//             GitHub
 //           </Button>
 //         </div>
 //       </CardContent>
 //     </Card>
 //   );
 // }
+// ------------------------------------------------------------------------------------------------------------------------
 
-"use client";
 
-import type React from "react";
+"use client"
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { auth, googleProvider, githubProvider } from "@/lib/firebase";
+import type React from "react"
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
+import { auth, googleProvider, githubProvider } from "@/lib/firebase"
 import {
   signInWithPopup,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   onAuthStateChanged,
-} from "firebase/auth";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Separator } from "@/components/ui/separator";
-import { Github, Eye, EyeOff } from "lucide-react"
+  updateProfile,
+} from "firebase/auth"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Separator } from "@/components/ui/separator"
+import { Github, Eye, EyeOff, ChevronLeft, ChevronRight } from "lucide-react"
+import { toast } from "sonner"
+import { motion, AnimatePresence } from "framer-motion"
 
+import type { User } from "firebase/auth"
 
-import type { User } from "firebase/auth";
+const signupSteps = ["Enter Details", "Verify Email", "Additional Info"]
 
 export default function AuthForm() {
   const [isSignUp, setIsSignUp] = useState(true);
+  const [currentStep, setCurrentStep] = useState(0)
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const [otp, setOtp] = useState("");
+  const [leetcode, setLeetcode] = useState("");
+  const [geeksforgeeks, setGeeksforgeeks] = useState("");
+  const [codeforces, setCodeforces] = useState("");
   const [error, setError] = useState("");
   const [user, setUser] = useState<User | null>(null);
-  const [showPassword, setShowPassword] = useState(false)
+  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
-    setError("");
-  }, []);
+    setError("")
+  }, [])
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
-        setUser(currentUser);
-        router.push("/");
+        setUser(currentUser)
+        router.push("/dashboard")
       }
-    });
-    return () => unsubscribe();
-  }, [router]);
+    })
+    return () => unsubscribe()
+  }, [router])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-
-    try {
-      if (isSignUp) {
-        const userCredential = await createUserWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
-        console.log("User signed up:", userCredential.user);
-        router.push("/");
+  
+    if (isSignUp) {
+      if (currentStep === 0) {
+        setCurrentStep(1);
+      } else if (currentStep === 1) {
+        if (otp === "000-000") {
+          setCurrentStep(2);
+        } else {
+          setError("Invalid OTP. Please enter 000-000.");
+        }
       } else {
-        const userCredential = await signInWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
-        console.log("User signed in:", userCredential.user);
-        router.push("/");
+        try {
+          // Create Firebase authentication on step 2 when the user enters handles
+          const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+          await updateProfile(userCredential.user, { displayName: name });
+          console.log("User signed up:", userCredential.user);
+  
+          // Listen for auth state change to trigger API call
+          onAuthStateChanged(auth, async (currentUser) => {
+            if (currentUser) {
+              const token = await currentUser.getIdToken();
+              console.log("Generated Token:", token);
+  
+              const requestData = {
+                uid: currentUser.uid,
+                email: currentUser.email,
+                name,
+                leetcode,
+                geeksforgeeks,
+                codeforces,
+              };
+  
+              console.log("Sending user data:", requestData);
+  
+              const response = await fetch("/api/saveUserData", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  "Authorization": `Bearer ${token}`,
+                },
+                body: JSON.stringify(requestData),
+              });
+  
+              const data = await response.json();
+              console.log("API Response:", data);
+  
+              if (!response.ok) {
+                throw new Error(data.message || "Failed to save user data.");
+              }
+  
+              toast.success("Account created successfully!", {
+                description: "Your account has been created and handles saved. Redirecting to dashboard...",
+              });
+  
+              setTimeout(() => {
+                router.push("/dashboard");
+              }, 2000);
+            }
+          });
+        } catch (err: any) {
+          setError(err.message);
+        }
       }
-    } catch (err: any) {
-      setError(err.message);
+    } else {
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        console.log("User signed in:", userCredential.user);
+        router.push("/dashboard");
+      } catch (err: any) {
+        setError(err.message);
+      }
     }
   };
+  
 
   const handleGoogleAuth = async () => {
     try {
-      const result = await signInWithPopup(auth, googleProvider);
-      console.log("Google Sign-In successful:", result.user);
-      router.push("/");
+      const result = await signInWithPopup(auth, googleProvider)
+      console.log("Google Sign-In successful:", result.user)
+      router.push("/dashboard")
     } catch (err: any) {
-      setError(err.message);
+      setError(err.message)
     }
-  };
+  }
 
   const handleGitHubAuth = async () => {
     try {
-      const result = await signInWithPopup(auth, githubProvider);
-      console.log("GitHub Sign-In successful:", result.user);
-      router.push("/");
+      const result = await signInWithPopup(auth, githubProvider)
+      console.log("GitHub Sign-In successful:", result.user)
+      router.push("/dashboard")
     } catch (err: any) {
-      setError(err.message);
+      setError(err.message)
     }
-  };
+  }
 
-  return (
-    <Card className="w-[350px] shadow-lg sensitive-cursor">
-      <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl font-bold">
-          {isSignUp ? "Create an account" : "Welcome back"}
-        </CardTitle>
-        <CardDescription className="text-sm text-muted-foreground">
-          {isSignUp
-            ? "Enter your details to create your account"
-            : "Enter your credentials to access your account"}
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Tabs value={isSignUp ? "signup" : "signin"} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-4">
-            <TabsTrigger value="signup" onClick={() => setIsSignUp(true)}>
-              Sign Up
-            </TabsTrigger>
-            <TabsTrigger value="signin" onClick={() => setIsSignUp(false)}>
-              Sign In
-            </TabsTrigger>
-          </TabsList>
-          <TabsContent value="signup">
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {error && <p className="text-red-500 text-sm">{error}</p>}
+  const renderSignUpStep = () => {
+    return (
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={currentStep}
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -20 }}
+          transition={{ duration: 0.3 }}
+        >
+          {currentStep === 0 && (
+            <>
               <div className="space-y-2">
-                <Label htmlFor="name" className="text-sm font-medium">
-                  Name
-                </Label>
+                <Label htmlFor="name">Name</Label>
                 <Input
                   id="name"
                   type="text"
-                  placeholder="Ligma Bawls"
+                  placeholder="John Doe"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
-                  className="w-full"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-medium">
-                  Email
-                </Label>
+                <Label htmlFor="email">Email</Label>
                 <Input
                   id="email"
                   type="email"
-                  placeholder="sigmaboi@example.com"
+                  placeholder="john@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  autoComplete="off"
-                  className="w-full"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-sm font-medium">
-                  Password
-                </Label>
+                <Label htmlFor="password">Password</Label>
                 <div className="relative">
                   <Input
                     id="password"
@@ -307,8 +478,7 @@ export default function AuthForm() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="w-full pr-10"
-                    autoComplete="new-password"
+                    className="pr-10"
                   />
                   <button
                     type="button"
@@ -319,37 +489,127 @@ export default function AuthForm() {
                   </button>
                 </div>
               </div>
+            </>
+          )}
+          {currentStep === 1 && (
+            <div className="space-y-2">
+              <Label htmlFor="otp">Enter OTP</Label>
+              <Input
+                id="otp"
+                type="text"
+                placeholder="000-000"
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
+                required
+              />
+              <p className="text-sm text-muted-foreground">Enter 000-000 to proceed (no actual verification)</p>
+            </div>
+          )}
+          {currentStep === 2 && (
+            <>
+              <div className="space-y-2">
+                <Label htmlFor="leetcode">LeetCode Handle</Label>
+                <Input
+                  id="leetcode"
+                  type="text"
+                  placeholder="Your LeetCode handle"
+                  value={leetcode}
+                  onChange={(e) => setLeetcode(e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="geeksforgeeks">GeeksforGeeks Handle</Label>
+                <Input
+                  id="geeksforgeeks"
+                  type="text"
+                  placeholder="Your GeeksforGeeks handle"
+                  value={geeksforgeeks}
+                  onChange={(e) => setGeeksforgeeks(e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="codeforces">Codeforces Handle</Label>
+                <Input
+                  id="codeforces"
+                  type="text"
+                  placeholder="Your Codeforces handle"
+                  value={codeforces}
+                  onChange={(e) => setCodeforces(e.target.value)}
+                />
+              </div>
+            </>
+          )}
+        </motion.div>
+      </AnimatePresence>
+    )
+  }
 
-              <Button type="submit" className="w-full">
-                Create Account
-              </Button>
+  return (
+    <Card className="w-[400px] shadow-lg">
+      <CardHeader>
+        <CardTitle className="text-2xl font-bold">{isSignUp ? "Create an account" : "Welcome back"}</CardTitle>
+        <CardDescription className="text-sm text-muted-foreground">
+          {isSignUp ? "Enter your details to create your account" : "Enter your credentials to access your account"}
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Tabs
+          value={isSignUp ? "signup" : "signin"}
+          className="w-full"
+          onValueChange={(value) => {
+            setIsSignUp(value === "signup")
+            setCurrentStep(0)
+          }}
+        >
+          <TabsList className="grid w-full grid-cols-2 mb-4">
+            <TabsTrigger value="signup">Sign Up</TabsTrigger>
+            <TabsTrigger value="signin">Sign In</TabsTrigger>
+          </TabsList>
+          <TabsContent value="signup">
+            <form onSubmit={handleSubmit} className="space-y-4">
+              {error && <p className="text-red-500 text-sm">{error}</p>}
+              {renderSignUpStep()}
+              <div className="flex justify-between mt-6">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setCurrentStep(currentStep - 1)}
+                  disabled={currentStep === 0}
+                  className="w-[48%] flex items-center justify-center"
+                >
+                  <ChevronLeft className="w-4 h-4 mr-2" />
+                  Previous
+                </Button>
+                <Button type="submit" className="w-[48%] flex items-center justify-center">
+                  {currentStep === signupSteps.length - 1 ? (
+                    "Create Account"
+                  ) : (
+                    <>
+                      Next
+                      <ChevronRight className="w-4 h-4 ml-2" />
+                    </>
+                  )}
+                </Button>
+              </div>
             </form>
           </TabsContent>
           <TabsContent value="signin">
             <form onSubmit={handleSubmit} className="space-y-4">
               {error && <p className="text-red-500 text-sm">{error}</p>}
               <div className="space-y-2">
-                <Label htmlFor="signin-email" className="text-sm font-medium">
-                  Email
-                </Label>
+                <Label htmlFor="signin-email">Email</Label>
                 <Input
                   id="signin-email"
                   type="email"
-                  placeholder="sigmaboi@example.com"
+                  placeholder="john@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   autoComplete="off"
-                  className="w-full"
                 />
               </div>
               <div className="space-y-2">
-                <Label
-                  htmlFor="signin-password"
-                  className="text-sm font-medium"
-                >
-                  Password
-                </Label>
+                <Label htmlFor="signin-password">Password</Label>
                 <div className="relative">
                   <Input
                     id="signin-password"
@@ -357,8 +617,8 @@ export default function AuthForm() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    autoComplete="new-password"
-                    className="w-full pr-10"
+                    autoComplete="current-password"
+                    className="pr-10"
                   />
                   <button
                     type="button"
@@ -375,6 +635,31 @@ export default function AuthForm() {
             </form>
           </TabsContent>
         </Tabs>
+        {isSignUp && (
+          <div className="flex justify-between items-center mt-6 mb-4">
+            {signupSteps.map((step, index) => (
+              <div key={index} className="flex flex-col items-center">
+                <motion.div
+                  className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                    index === currentStep
+                      ? "bg-primary text-primary-foreground"
+                      : index < currentStep
+                        ? "bg-primary/20 text-primary"
+                        : "bg-muted text-muted-foreground"
+                  }`}
+                  initial={false}
+                  animate={{
+                    scale: index === currentStep ? 1.2 : 1,
+                    transition: { type: "spring", stiffness: 300, damping: 20 },
+                  }}
+                >
+                  {index + 1}
+                </motion.div>
+                <span className="text-xs mt-1 text-muted-foreground">{step}</span>
+              </div>
+            ))}
+          </div>
+        )}
         <div className="relative my-4">
           <Separator />
           <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-background px-2 text-xs text-muted-foreground">
@@ -382,11 +667,7 @@ export default function AuthForm() {
           </span>
         </div>
         <div className="grid grid-cols-2 gap-4 items-center">
-          <Button
-            variant="outline"
-            className="w-full"
-            onClick={handleGoogleAuth}
-          >
+          <Button variant="outline" className="w-full" onClick={handleGoogleAuth}>
             <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
               <path
                 d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -408,16 +689,13 @@ export default function AuthForm() {
             </svg>
             Google
           </Button>
-          <Button
-            variant="outline"
-            className="w-full"
-            onClick={handleGitHubAuth}
-          >
+          <Button variant="outline" className="w-full" onClick={handleGitHubAuth}>
             <Github className="mr-2 h-4 w-4" />
             GitHub
           </Button>
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }
+
