@@ -87,13 +87,17 @@ export default function Dashboard() {
     setLoading(true);
     setError(null);
     try {
+      const token = await getAuthToken(); 
+  
       const [statsResponse, submissionsResponse] = await Promise.all([
-        axios.get(
-          `https://leetcode-stats-api.herokuapp.com/${leetcodeUsername}`
-        ),
-        axios.get(`http://localhost:5000/${leetcodeUsername}/acSubmission`),
+        axios.get(`/api/leetcodeStats?username=${leetcodeUsername}`, {
+          headers: { Authorization: `Bearer ${token}` }, //adding token to header for auth check in the api
+        }),
+        axios.get(`/api/userSubmissions?username=${leetcodeUsername}`, {
+          headers: { Authorization: `Bearer ${token}` }, //adding token to header for auth check in the api
+        }),
       ]);
-
+  
       if (
         statsResponse.data.status === "success" &&
         submissionsResponse.data.count > 0
@@ -102,16 +106,17 @@ export default function Dashboard() {
         setSubmissions(submissionsResponse.data);
       } else {
         setError(
-          "Failed to fetch LeetCode stats. Please check your LeetCode username and try again."
+          "Failed to fetch stats. Please check your username and try again."
         );
       }
     } catch (err) {
       setError(
-        "An error occurred while fetching LeetCode stats. Please try again later."
+        "An error occurred while fetching stats. Please try again later."
       );
     }
     setLoading(false);
   };
+  
 
   return (
     <div className="min-h-screen bg-background text-foreground">
