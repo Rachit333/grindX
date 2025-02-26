@@ -1,21 +1,48 @@
+// import admin from "firebase-admin";
+// import fs from "fs";
+// import path from "path";
+
+// if (!admin.apps.length) {
+//   const serviceAccountPath = path.join(process.cwd(), "config/firebaseAdmin.json");
+
+//   if (!fs.existsSync(serviceAccountPath)) {
+//     throw new Error("Firebase service account key file not found");
+//   }
+
+//   const serviceAccount = JSON.parse(
+//     fs.readFileSync(serviceAccountPath, "utf-8")
+//   );
+
+//   admin.initializeApp({
+//     credential: admin.credential.cert(serviceAccount),
+//   });
+// }
+
+// export default admin;
+
 import admin from "firebase-admin";
 import fs from "fs";
 import path from "path";
 
 if (!admin.apps.length) {
-  const serviceAccountPath = path.join(process.cwd(), "config/firebaseAdmin.json");
+  try {
+    const serviceAccountPath = path.join(process.cwd(), "config/firebaseAdmin.json");
 
-  if (!fs.existsSync(serviceAccountPath)) {
-    throw new Error("Firebase service account key file not found");
+    if (!fs.existsSync(serviceAccountPath)) {
+      throw new Error("Firebase service account key file not found at: " + serviceAccountPath);
+    }
+
+    const serviceAccount = JSON.parse(fs.readFileSync(serviceAccountPath, "utf-8"));
+
+    admin.initializeApp({
+      credential: admin.credential.cert(serviceAccount),
+    });
+
+    console.log("Firebase Admin Initialized");
+  } catch (error) {
+    console.error("Firebase Admin Initialization Error:", error);
   }
-
-  const serviceAccount = JSON.parse(
-    fs.readFileSync(serviceAccountPath, "utf-8")
-  );
-
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-  });
 }
 
+export const adminAuth = admin.auth();
 export default admin;
