@@ -1,163 +1,3 @@
-// "use client";
-
-// import { useState, useEffect } from "react";
-// import { auth } from "@/lib/firebase";
-// import { onAuthStateChanged, signOut } from "firebase/auth";
-// import { useRouter } from "next/navigation";
-// import { Button } from "@/components/ui/button";
-// import {
-//   DropdownMenu,
-//   DropdownMenuContent,
-//   DropdownMenuItem,
-//   DropdownMenuLabel,
-//   DropdownMenuSeparator,
-//   DropdownMenuTrigger,
-// } from "@/components/ui/dropdown-menu";
-// import { Avatar, AvatarImage } from "@/components/ui/avatar";
-// import { User, LogOut, Settings } from "lucide-react";
-// import { User as FirebaseUser } from "firebase/auth"; 
-
-// const getRandomAvatarUrl = () => {
-//   const getRandom = (max = 10) => Math.floor(Math.random() * max) + 1;
-
-//   const params = new URLSearchParams(
-//     Object.entries({
-//       face: getRandom(),
-//       nose: getRandom(),
-//       mouth: getRandom(),
-//       eyes: getRandom(),
-//       eyebrows: getRandom(),
-//       glasses: getRandom(),
-//       hair: getRandom(),
-//       accessories: getRandom(),
-//       details: getRandom(),
-//       beard: getRandom(),
-//       halloween: "0",
-//       christmas: "0",
-//     }).map(([key, value]) => [key, value.toString()]) // Convert numbers to strings
-//   );
-
-//   return `https://notion-avatars.netlify.app/api/avatar/?${params.toString()}`;
-// };
-
-
-// export default function AuthComponent() {
-//   const [user, setUser] = useState<FirebaseUser | null>(null);
-//   const router = useRouter();
-//   const [avatarUrl, setAvatarUrl] = useState("");
-
-//   useEffect(() => {
-//     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-//       setUser(currentUser);
-//       if (currentUser) {
-//         setAvatarUrl(getRandomAvatarUrl());
-//       }
-//     });
-
-//     return () => unsubscribe();
-//   }, []);
-
-//   useEffect(() => {
-//     const handleDropdownOpen = () => {
-//       document.body.style.overflow = "auto";
-//     };
-
-//     handleDropdownOpen();
-
-//     return () => {
-//       document.body.style.overflow = "";
-//     };
-//   }, []);
-
-//   const handleLogout = async () => {
-//     try {
-//       await signOut(auth);
-//       router.push("/login");
-//     } catch (error) {
-//       console.error("Logout failed:", error);
-//     }
-//   };
-
-//   if (!user) {
-//     return (
-//       <Button
-//         onClick={() => router.push("/login")}
-//         className="bg-white text-black hover:bg-gray-100 transition fixed top-4 right-4 sensitive-cursor"
-//       >
-//         Log in
-//       </Button>
-//     );
-//   }
-
-//   const handleCursorReset = () => {
-//     document.documentElement.dataset.cursorTheme = "default";
-//   };
-
-//   return (
-//     <div className="fixed top-4 right-4 cursor-none sensitive-cursor z-10">
-//       <DropdownMenu modal={false}>
-//         <DropdownMenuTrigger asChild>
-//           <Button
-//             variant="ghost"
-//             className="relative h-12 w-12 rounded-full bg-white"
-//           >
-//             <Avatar className="h-12 w-12">
-//               <AvatarImage src={avatarUrl} className="h-12 w-12" />
-//             </Avatar>
-//           </Button>
-//         </DropdownMenuTrigger>
-//         <DropdownMenuContent
-//           className="w-56 bg-white sensitive-cursor cursor-none"
-//           align="end"
-//           forceMount
-//           onClick={() =>
-//             (document.documentElement.dataset.cursorTheme = "default")
-//           }
-//         >
-//           <DropdownMenuLabel className="font-normal">
-//             <div className="flex flex-col space-y-1">
-//               <p className="text-sm font-medium leading-none">
-//                 {user.displayName || "User"}
-//               </p>
-//               <p className="text-xs leading-none text-muted-foreground">
-//                 {user.email}
-//               </p>
-//             </div>
-//           </DropdownMenuLabel>
-//           <DropdownMenuSeparator />
-//           <DropdownMenuItem
-//             onClick={() =>
-//               (document.documentElement.dataset.cursorTheme = "default")
-//             }
-//           >
-//             <User className="mr-2 h-4 w-4" />
-//             <span className="cursor-none">Profile</span>
-//           </DropdownMenuItem>
-//           <DropdownMenuItem
-//             onClick={() =>
-//               (document.documentElement.dataset.cursorTheme = "default")
-//             }
-//           >
-//             <Settings className="mr-2 h-4 w-4" />
-//             <span>Settings</span>
-//           </DropdownMenuItem>
-//           <DropdownMenuSeparator />
-//           <DropdownMenuItem
-//             onClick={() => {
-//               document.documentElement.dataset.cursorTheme = "default";
-//               handleLogout();
-//             }}
-//           >
-//             <LogOut className="mr-2 h-4 w-4" />
-//             <span>Log out</span>
-//           </DropdownMenuItem>
-//         </DropdownMenuContent>
-//       </DropdownMenu>
-//     </div>
-//   );
-// }
-
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -174,16 +14,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { User, LogOut, Settings } from "lucide-react";
+import { cn } from "@/lib/utils"; 
 
 export default function AuthComponent() {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [imageLoaded, setImageLoaded] = useState(false); 
   const router = useRouter();
 
-  // Get Auth Token
   async function getAuthToken() {
     return new Promise((resolve, reject) => {
       const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -198,7 +39,6 @@ export default function AuthComponent() {
     });
   }
 
-  // fetch user data from the database
   async function fetchUser() {
     try {
       setLoading(true);
@@ -208,9 +48,10 @@ export default function AuthComponent() {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      if (!data.success) throw new Error(data.message || "Failed to fetch user");
+      if (!data.success)
+        throw new Error(data.message || "Failed to fetch user");
 
-      setUser(data.user); 
+      setUser(data.user);
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -231,50 +72,65 @@ export default function AuthComponent() {
     }
   };
 
-  if (loading) return <p>Loading...</p>;
   if (error) return <p className="text-red-500">{error}</p>;
 
-  if (!user) {
-    return (
-      <></>
-    );
-  }
+  if (!user && !loading) return null;
 
   return (
     <div className="fixed top-4 right-4 z-10 sensitive-cursor">
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="relative h-12 w-12 rounded-full bg-white sensitive-cursor">
+          <Button
+            variant="ghost"
+            className="relative h-12 w-12 rounded-full bg-white sensitive-cursor"
+          >
             <Avatar className="h-12 w-12">
-              <AvatarImage src={user.profilePicture} className="h-12 w-12" />
+              {loading ? (
+                
+                <div className="w-12 h-12 border-2 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
+              ) : (
+                <>
+                  <AvatarImage
+                    src={user?.profilePicture}
+                    className={cn(
+                      "h-12 w-12 opacity-0 scale-90 transition-all duration-500",
+                      imageLoaded && "opacity-100 scale-100"
+                    )}
+                    onLoad={() => setImageLoaded(true)} 
+                  />
+                  <AvatarFallback>
+                    {user?.name?.charAt(0) || "?"}
+                  </AvatarFallback>
+                </>
+              )}
             </Avatar>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-56 bg-white sensitive-cursor" align="end" forceMount>
+
+        <DropdownMenuContent
+          className="w-56 bg-white sensitive-cursor"
+          align="end"
+          forceMount
+        >
           <DropdownMenuLabel>
             <div className="flex flex-col space-y-1">
-              <p className="text-sm font-medium leading-none">{user.name}</p>
-              <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
+              <p className="text-sm font-medium leading-none">{user?.name}</p>
+              <p className="text-xs leading-none text-muted-foreground">
+                {user?.email}
+              </p>
             </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() =>
-              (document.documentElement.dataset.cursorTheme = "default")
-            }>
+          <DropdownMenuItem>
             <User className="mr-2 h-4 w-4" />
             <span>Profile</span>
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() =>
-              (document.documentElement.dataset.cursorTheme = "default")
-            }>
+          <DropdownMenuItem>
             <Settings className="mr-2 h-4 w-4" />
             <span>Settings</span>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => {
-              document.documentElement.dataset.cursorTheme = "default";
-              handleLogout();
-            }}>
+          <DropdownMenuItem onClick={handleLogout}>
             <LogOut className="mr-2 h-4 w-4" />
             <span>Log out</span>
           </DropdownMenuItem>

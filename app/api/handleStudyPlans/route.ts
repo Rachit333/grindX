@@ -1,26 +1,3 @@
-// import { NextRequest, NextResponse } from "next/server";
-// import connectDB from "@/lib/mongodb";
-// import { StudyPlans } from "@/models/studyPlans";
-
-// connectDB();
-
-// export async function POST(req: NextRequest) {
-//   try {
-//     const body = await req.json(); 
-//     const newPlan = new StudyPlans(body);
-//     await newPlan.save();
-    
-//     return NextResponse.json({ message: "Study Plan created", data: newPlan }, { status: 201 });
-//   } catch (error) {
-//     return NextResponse.json({ message: "Server Error", error: (error as Error).message }, { status: 500 });
-//   }
-// }
-
-// export async function GET() {
-//   return NextResponse.json({ message: "Method Not Allowed" }, { status: 405 });
-// }
-
-// makes the POST request to the database to create the database
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import { StudyPlans } from "@/models/studyPlans";
@@ -41,6 +18,20 @@ export async function GET() {
         participants: 120,
         publicity: 1,
         authorizedUsers: ["jasoriarachit@gmail.com"],
+        categories: [
+          {
+            id: "c1",
+            title: "Frontend Development",
+            description: "Learn React and modern UI/UX practices.",
+            questions: ["1", "2", "3"],
+          },
+          {
+            id: "c2",
+            title: "Backend Development",
+            description: "Master Node.js and MongoDB.",
+            questions: ["4", "5", "6"],
+          },
+        ],
       },
       {
         title: "Data Structures & Algorithms",
@@ -52,7 +43,21 @@ export async function GET() {
         rating: 4.9,
         participants: 200,
         publicity: 1,
-        authorizedUsers: ["abhijeet@gmail.com","jasoriarachit@gmail.com"],
+        authorizedUsers: ["abhijeet@gmail.com", "jasoriarachit@gmail.com"],
+        categories: [
+          {
+            id: "c1",
+            title: "Arrays & Strings",
+            description: "Fundamental problems on arrays and strings.",
+            questions: ["7", "8", "9"],
+          },
+          {
+            id: "c2",
+            title: "Graphs & Trees",
+            description: "Graph traversal and tree problems.",
+            questions: ["10", "11", "12"],
+          },
+        ],
       },
       {
         title: "Machine Learning Basics",
@@ -64,8 +69,22 @@ export async function GET() {
         rating: 4.5,
         participants: 90,
         publicity: 1,
-        authorizedUsers: ["sigmaboi@gmail.com","abhijeet@gmail.com"],
-      }
+        authorizedUsers: ["sigmaboi@gmail.com", "abhijeet@gmail.com"],
+        categories: [
+          {
+            id: "c1",
+            title: "Python Basics",
+            description: "Learn Python and essential libraries for ML.",
+            questions: ["13", "14", "15"],
+          },
+          {
+            id: "c2",
+            title: "Neural Networks",
+            description: "Understand the fundamentals of neural networks.",
+            questions: ["16", "17", "18"],
+          },
+        ],
+      },
     ].map(plan => ({ ...plan, createdOn: new Date() }));
 
     const existingCount = await StudyPlans.countDocuments();
@@ -82,8 +101,15 @@ export async function GET() {
       { status: 200 }
     );
   } catch (error) {
+    if (error instanceof Error) {
+      return NextResponse.json(
+        { message: "Error inserting data", error: error.message },
+        { status: 500 }
+      );
+    }
+  
     return NextResponse.json(
-      { message: "Error inserting data", error: (error as Error).message },
+      { message: "Error inserting data", error: "Unknown error occurred" },
       { status: 500 }
     );
   }

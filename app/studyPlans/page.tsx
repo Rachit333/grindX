@@ -10,7 +10,7 @@ import {
   Users,
   Star,
   BookOpen,
-  Sparkles,
+  Brain,
   TrendingUp,
   ChevronRight,
 } from "lucide-react";
@@ -68,7 +68,7 @@ export default function StudyPlansPage() {
           console.error("Error:", data.error);
         }
       } catch (error) {
-        console.error("🔥 API Request Error:", error);
+        console.error("API Request Error:", error);
       } finally {
         setIsLoading(false);
       }
@@ -194,7 +194,7 @@ export default function StudyPlansPage() {
             className="rounded-full border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50 hover:text-zinc-900 data-[state=open]:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-zinc-50"
             onClick={() => handleFilterClick("Advanced")}
           >
-            <Sparkles className="mr-2 h-4 w-4" /> Advanced
+            <Brain className="mr-2 h-4 w-4" /> Advanced
           </Button>
           <Button
             variant={activeFilter === "Trending" ? "default" : "outline"}

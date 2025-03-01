@@ -43,6 +43,8 @@ export async function GET(req: NextRequest) {
         { publicity: 0, email: userEmail },
       ],
     });
+    
+    console.log(studyPlans);
 
     return NextResponse.json({ status: "success", data: studyPlans }, { status: 200 });
   } catch (error) {

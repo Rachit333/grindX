@@ -139,7 +139,7 @@ export default function JoinStudyPlan() {
                 </Alert>
               )}
               {success && (
-                <Alert variant="default">
+                <Alert variant="success">
                   <CheckCircle2 className="h-4 w-4" />
                   <AlertDescription>{success}</AlertDescription>
                 </Alert>

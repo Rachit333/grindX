@@ -12,9 +12,6 @@ import {
   Code,
   Home,
   LayoutDashboard,
-  LifeBuoy,
-  Settings,
-  BookOpen,
   Zap,
   Trophy,
 } from "lucide-react";
