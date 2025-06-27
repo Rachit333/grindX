@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 
-import "@/styles/shimmerEffect.css";
+// import "@/styles/shimmerEffect.css";
 
 import {
   Search,
@@ -235,7 +235,7 @@ export default function StudyPlansPage() {
               No study plans found
             </h3>
             <p className="mb-6 text-zinc-600 dark:text-zinc-400">
-              Try adjusting your search or filters to find what you're looking
+              Try adjusting your search or filters to find what you&apos;re looking
               for
             </p>
             <Button
@@ -452,7 +452,7 @@ export default function StudyPlansPage() {
                   <div className="mb-6 flex items-center gap-4 text-zinc-600 dark:text-zinc-400">
                     <div className="flex items-center">
                       <Clock className="mr-1.5 h-4 w-4" />
-                      <span className="text-sm">Speedrun em'</span>
+                      <span className="text-sm">Speedrun em&apos;</span>
                     </div>
                   </div>
 
