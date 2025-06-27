@@ -1381,4 +1381,3 @@ export default function QuestionSolvingView() {
     </div>
   )
 }
-

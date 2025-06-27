@@ -4,6 +4,9 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+
+import "@/styles/shimmerEffect.css";
+
 import {
   Search,
   Clock,
@@ -13,12 +16,12 @@ import {
   Brain,
   TrendingUp,
   ChevronRight,
+  Sparkles,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { auth } from "@/lib/firebase";
-import Image from "next/image";
 
 interface StudyPlan {
   uid: string;
@@ -156,7 +159,8 @@ export default function StudyPlansPage() {
             </h1>
             <p className="mb-8 text-lg text-zinc-600 dark:text-zinc-400">
               Find the perfect study plan to accelerate your learning journey.
-              <br />Browse through expert-curated content tailored to your needs.
+              <br />
+              Browse through expert-curated content tailored to your needs.
             </p>
             <div className="relative flex w-full max-w-2xl items-center overflow-hidden rounded-full border border-zinc-200 bg-white shadow-sm transition-all focus-within:ring-2 focus-within:ring-zinc-300 dark:border-zinc-800 dark:bg-zinc-900 dark:focus-within:ring-zinc-700">
               <Search className="ml-4 h-5 w-5 text-zinc-400" />
@@ -249,6 +253,229 @@ export default function StudyPlansPage() {
 
         <AnimatePresence>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {/* takes to aryus's ml algo */}
+            {/* <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.3 }}
+              whileHover={{ y: -4, transition: { duration: 0.2 } }}
+              className="group cursor-pointer"
+              onClick={() => router.push("/ai-recommendations")}
+            >
+              <div className="relative overflow-hidden rounded-xl border-2 border-purple-300 bg-white/90 backdrop-blur-sm transition-all duration-200 hover:shadow-lg dark:bg-zinc-900/90">
+                <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                  <Sparkles className="absolute top-4 right-4 h-16 w-16 text-purple-100 dark:text-purple-900/30 opacity-70" />
+                  <Sparkles className="absolute bottom-12 left-6 h-8 w-8 text-purple-100 dark:text-purple-900/30 opacity-50" />
+                  <Sparkles className="absolute top-20 left-10 h-5 w-5 text-purple-100 dark:text-purple-900/30 opacity-60" />
+                  <Sparkles className="absolute bottom-4 right-12 h-10 w-10 text-purple-100 dark:text-purple-900/30 opacity-40" />
+                </div>
+                <div className="p-6 relative z-10">
+                  <div className="mb-4 flex items-start justify-between">
+                    <h3 className="text-xl font-semibold text-zinc-900 dark:text-zinc-50">
+                      AI Generated Recommendations
+                    </h3>
+                    <Badge className="bg-purple-50 text-purple-700 border-purple-200 border px-2.5 py-0.5 text-xs font-medium">
+                      Personalized
+                    </Badge>
+                  </div>
+
+                  <p className="mb-4 line-clamp-2 text-zinc-600 dark:text-zinc-400">
+                    Discover study plans tailored to your learning goals and preferences using AI.
+                  </p>
+
+                  <div className="mb-6 flex flex-wrap gap-2">
+                    <Badge
+                      variant="outline"
+                      className="rounded-full border-zinc-200 bg-zinc-50 px-2.5 py-0.5 text-xs font-medium text-zinc-700 dark:border-zinc-800 dark:bg-zinc-800 dark:text-zinc-300"
+                    >
+                      Personalized
+                    </Badge>
+                    <Badge
+                      variant="outline"
+                      className="rounded-full border-zinc-200 bg-zinc-50 px-2.5 py-0.5 text-xs font-medium text-zinc-700 dark:border-zinc-800 dark:bg-zinc-800 dark:text-zinc-300"
+                    >
+                      AI-Powered
+                    </Badge>
+                    <Badge
+                      variant="outline"
+                      className="rounded-full border-zinc-200 bg-zinc-50 px-2.5 py-0.5 text-xs font-medium text-zinc-700 dark:border-zinc-800 dark:bg-zinc-800 dark:text-zinc-300"
+                    >
+                      Smart
+                    </Badge>
+                  </div>
+
+                  <div className="mb-6 flex items-center gap-4 text-zinc-600 dark:text-zinc-400">
+                    <div className="flex items-center">
+                      <Clock className="mr-1.5 h-4 w-4" />
+                      <span className="text-sm">Instant</span>
+                    </div>
+                  </div>
+
+                  
+                  <div className="flex items-center justify-between border-t border-zinc-100 pt-4 dark:border-zinc-800">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">AI Powered</span>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="rounded-full p-0 text-zinc-500 hover:bg-transparent hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200"
+                    >
+                      <span className="text-sm font-medium">Get Started</span>
+                      <ChevronRight className="ml-1 h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </motion.div> */}
+
+            {/* below is f'ed up */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              whileHover={{
+                y: -4,
+                transition: { duration: 0.2, ease: "easeOut" },
+              }}
+              className="group cursor-pointer example-2"
+              onClick={() => router.push("/studyPlans/ai-recommended")}
+            >
+              <div className="relative overflow-hidden rounded-xl bg-white/90 backdrop-blur-sm hover:shadow-lg dark:bg-zinc-900/90 border-2 border-purple-300 inner">
+                <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                  <Sparkles className="absolute bottom-12 left-6 h-8 w-8 text-purple-200 dark:text-purple-900/30 opacity-50" />
+                  <Sparkles className="absolute bottom-4 right-12 h-10 w-10 text-purple-200 dark:text-purple-900/30 opacity-40" />
+                </div>
+
+                <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                  <motion.div
+                    animate={{
+                      opacity: [0.4, 0.7, 0.4],
+                      scale: [1, 1.05, 1],
+                    }}
+                    transition={{
+                      duration: 3,
+                      repeat: Infinity,
+                      repeatType: "mirror",
+                    }}
+                  >
+                    <Sparkles className="absolute top-4 right-4 h-16 w-16 text-purple-100 dark:text-purple-900/30" />
+                  </motion.div>
+                  <motion.div
+                    animate={{
+                      opacity: [0.3, 0.6, 0.3],
+                      scale: [1, 1.1, 1],
+                    }}
+                    transition={{
+                      duration: 4,
+                      repeat: Infinity,
+                      repeatType: "mirror",
+                      delay: 0.5,
+                    }}
+                  >
+                    <Sparkles className="absolute bottom-12 left-6 h-8 w-8 text-purple-100 dark:text-purple-900/30" />
+                  </motion.div>
+                  <motion.div
+                    animate={{
+                      opacity: [0.5, 0.5, 0.5],
+                      scale: [1, 1.15, 1],
+                    }}
+                    transition={{
+                      duration: 5,
+                      repeat: Infinity,
+                      repeatType: "mirror",
+                      delay: 1,
+                    }}
+                  >
+                    <Sparkles className="absolute top-20 left-10 h-5 w-5 text-purple-100 dark:text-purple-900/30" />
+                  </motion.div>
+                  <motion.div
+                    animate={{
+                      opacity: [0.2, 0.5, 0.2],
+                      scale: [1, 1.08, 1],
+                    }}
+                    transition={{
+                      duration: 3.5,
+                      repeat: Infinity,
+                      repeatType: "mirror",
+                      delay: 1.5,
+                    }}
+                  >
+                    <Sparkles className="absolute bottom-4 right-12 h-10 w-10 text-purple-100 dark:text-purple-900/30" />
+                  </motion.div>
+                </div>
+
+                <div className="p-6 relative z-10">
+                  <div className="mb-4 flex items-start justify-between">
+                    <h3 className="text-xl font-semibold text-zinc-900 dark:text-zinc-50">
+                      AI Generated Recommendations
+                    </h3>
+                    <Badge className="bg-purple-50 text-purple-700 border-purple-200 border px-2.5 py-0.5 text-xs font-medium hover:bg-purple-50">
+                      Personalized
+                    </Badge>
+                  </div>
+
+                  <p className="mb-4 line-clamp-2 text-zinc-600 dark:text-zinc-400">
+                    Plans tailored to your learning goals using AI.
+                  </p>
+
+                  <div className="mb-6 flex flex-wrap gap-2">
+                    <Badge
+                      variant="outline"
+                      className="rounded-full border-zinc-200 bg-zinc-50 px-2.5 py-0.5 text-xs font-medium text-zinc-700 dark:border-zinc-800 dark:bg-zinc-800 dark:text-zinc-300"
+                    >
+                      Arrays
+                    </Badge>
+                    <Badge
+                      variant="outline"
+                      className="rounded-full border-zinc-200 bg-zinc-50 px-2.5 py-0.5 text-xs font-medium text-zinc-700 dark:border-zinc-800 dark:bg-zinc-800 dark:text-zinc-300"
+                    >
+                      Linked Lists
+                    </Badge>
+                    <Badge
+                      variant="outline"
+                      className="rounded-full border-zinc-200 bg-zinc-50 px-2.5 py-0.5 text-xs font-medium text-zinc-700 dark:border-zinc-800 dark:bg-zinc-800 dark:text-zinc-300"
+                    >
+                      Trees
+                    </Badge>
+
+                    <Badge
+                      variant="outline"
+                      className="rounded-full border-zinc-200 bg-transparent px-2.5 py-0.5 text-xs font-medium text-zinc-500 dark:border-zinc-700 dark:text-zinc-400"
+                    >
+                      +4 more
+                    </Badge>
+                  </div>
+
+                  <div className="mb-6 flex items-center gap-4 text-zinc-600 dark:text-zinc-400">
+                    <div className="flex items-center">
+                      <Clock className="mr-1.5 h-4 w-4" />
+                      <span className="text-sm">Speedrun em'</span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between border-t border-zinc-100 pt-4 dark:border-zinc-800">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                        AI Powered
+                      </span>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="rounded-full p-0 text-zinc-500 hover:bg-transparent hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200"
+                    >
+                      <span className="text-sm font-medium">Get Started</span>
+                      <ChevronRight className="ml-1 h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+            {/* ml card ends here */}
+
             {filteredPlans.map((plan, index) => (
               <motion.div
                 key={plan.uid}
@@ -260,8 +487,8 @@ export default function StudyPlansPage() {
                 className="group cursor-pointer"
                 onClick={() => router.push(`/studyPlans/planid?id=${plan.uid}`)}
               >
-                <div className="overflow-hidden rounded-xl border border-zinc-200 bg-white/90 backdrop-blur-sm transition-all duration-200 hover:shadow-lg dark:border-zinc-800 dark:bg-zinc-900/90">
-                  {/* Card Content */}
+                {/* study plan cards */}
+                <div className="overflow-hidden rounded-xl border border-zinc-400 bg-white/90 backdrop-blur-sm transition-all duration-200 hover:shadow-lg dark:border-zinc-800 dark:bg-zinc-900/90">
                   <div className="p-6">
                     <div className="mb-4 flex items-start justify-between">
                       <h3 className="text-xl font-semibold text-zinc-900 dark:text-zinc-50">
